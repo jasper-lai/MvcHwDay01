@@ -1,0 +1,56 @@
+﻿@model IEnumerable<MvcHwDay01.Models.BillingItemViewModel>
+
+@{
+    ViewBag.Title = "ListCurrent";
+    int i = 0;
+    Layout = null;
+}
+
+@*<h2>ListCurrent</h2>*@
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<table class="table">
+    <tr>
+        <th>
+            編號:#
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BillTypeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BillDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Aoumnt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Memo)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        i = i + 1;
+        <tr>
+            <td>
+                @i
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BillTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BillDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Aoumnt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Memo)
+            </td>
+        </tr>
+    }
+
+</table>

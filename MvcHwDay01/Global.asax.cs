@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Diagnostics;
+using MvcHwDay01.Models;
 
 namespace MvcHwDay01
 {
@@ -16,6 +18,9 @@ namespace MvcHwDay01
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            //初始化靜態類別 BillingHistory 
+            Utilities.MakeBillingHistoryData();
         }
     }
 }
