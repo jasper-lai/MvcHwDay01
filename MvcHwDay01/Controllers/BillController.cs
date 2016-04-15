@@ -18,6 +18,9 @@ namespace MvcHwDay01.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            //初始化靜態類別 BillingHistory 
+            Utilities.MakeBillingHistoryData();
+
             var obj = new BillingItemViewModel()
             {
                 BillDate = DateTime.Today
@@ -38,10 +41,9 @@ namespace MvcHwDay01.Controllers
         public ActionResult ListCurrent()
         {
             //產生對應的中文名稱
-            KeyValuePair<int, string> defaultObj = new KeyValuePair<int, string>(-1, "請選擇...");
             foreach (var item in BillingHistory.Data["Jasper"])
             {
-                item.BillTypeName = GlobalCodeMappings.BillTypes.Where(o => o.Key == item.BillType).DefaultIfEmpty(defaultObj).First().Value;
+                item.BillTypeName = GlobalCodeMappings.BillTypes[item.BillType];
             }
             return View(BillingHistory.Data["Jasper"]);
         }

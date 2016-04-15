@@ -9,22 +9,25 @@ namespace MvcHwDay01.Models
     {
         public static void MakeBillingHistoryData()
         {
-            //初始化靜態類別 BillingHistory 
-            BillingHistory.Data = new Dictionary<string, IEnumerable<BillingItemViewModel>>()
+            //初始化靜態類別 BillingHistory
+            if (null == BillingHistory.Data)
             {
-                {"Jasper", new List<BillingItemViewModel>()
-                    {
-                        new BillingItemViewModel() { BillType=1, Aoumnt=100, BillDate=Convert.ToDateTime("2016-04-09"), Memo="支出100元" },
-                        new BillingItemViewModel() { BillType=2, Aoumnt=200, BillDate=Convert.ToDateTime("2016-04-10"), Memo="收入200元" },
+                BillingHistory.Data = new Dictionary<string, IEnumerable<BillingItemViewModel>>()
+                {
+                    {"Jasper", new List<BillingItemViewModel>()
+                        {
+                            new BillingItemViewModel() { BillType=1, Aoumnt=100, BillDate=new DateTime(2016,04,09), Memo="支出100元" },
+                            new BillingItemViewModel() { BillType=2, Aoumnt=200, BillDate=new DateTime(2016,04,10), Memo="收入200元" },
+                        }
+                    },
+                    {"Judy", new List<BillingItemViewModel>()
+                        {
+                            new BillingItemViewModel() { BillType=2, Aoumnt=200, BillDate=new DateTime(2016,04,09), Memo="收入200元" },
+                            new BillingItemViewModel() { BillType=1, Aoumnt=100, BillDate=new DateTime(2016,04,10), Memo="支出100元" },
+                        }
                     }
-                },
-                {"Judy", new List<BillingItemViewModel>()
-                    {
-                        new BillingItemViewModel() { BillType=2, Aoumnt=200, BillDate=Convert.ToDateTime("2016-04-09"), Memo="收入200元" },
-                        new BillingItemViewModel() { BillType=1, Aoumnt=100, BillDate=Convert.ToDateTime("2016-04-10"), Memo="支出100元" },
-                    }
-                }
-            };
+                };
+            }
         }
 
         public static IEnumerable<BillingItemViewModel> GetBillingDataByUser(string userName)

@@ -18,9 +18,6 @@ namespace MvcHwDay01
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            //初始化靜態類別 BillingHistory 
-            Utilities.MakeBillingHistoryData();
         }
     }
 }
