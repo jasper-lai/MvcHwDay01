@@ -209,11 +209,9 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BillingViewModels.cs" />
-    <Compile Include="Models\Globals\BillingHistory.cs" />
     <Compile Include="Models\Globals\GlobalCodeMappings.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Globals\Utilities.cs" />
     <Compile Include="Models\SkillTreeHomeworkModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

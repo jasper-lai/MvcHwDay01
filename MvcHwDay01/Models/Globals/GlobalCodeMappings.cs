@@ -9,8 +9,8 @@ namespace MvcHwDay01.Models
     {
         public static IDictionary<int, string> BillTypes = new Dictionary<int, string>() {
             { -1, "請選擇 ..." },
-            { 1, "支出"},
-            { 2, "收入"},
+            { 0, "支出"},
+            { 1, "收入"},
         };
     }
 }

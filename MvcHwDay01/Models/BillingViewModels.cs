@@ -35,7 +35,7 @@ namespace MvcHwDay01.Models
         /// 金額
         /// </summary>
         [Display(Name = "金額")]
-        public decimal Aoumnt { get; set; }
+        public int Aoumnt { get; set; }
 
         /// <summary>
         /// 備註
