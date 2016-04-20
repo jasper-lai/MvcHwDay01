@@ -15,7 +15,7 @@ namespace MvcHwDay01.Models
         /// 類別
         /// </summary>
         /// <remarks>
-        /// 1.支出, 2.收入
+        /// 0.支出, 1.收入
         /// </remarks>
         [Display(Name = "類別")]
         public int BillType { get; set; }

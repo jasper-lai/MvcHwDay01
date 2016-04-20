@@ -61,10 +61,10 @@ namespace MvcHwDay01.Controllers
             var biils = db.AccountBooks
                 .OrderByDescending(x => x.Dateee)
                 .Take(20)
-                //必須要加上這個, 以下 產生對應的中文名稱 的部份, 才不會出錯; 因為會連結至 DB 執行那段敍述, 而出現以下錯誤
-                //LINQ to Entities 無法辨識方法 'System.String get_Item(Int32)' 方法，而且這個方法無法轉譯成存放區運算式。
-                //為效能考量, 最好在所有的 Where, OrderBy, Take ... 都作完以後, 才進行 .AsEnumerable()
-                .AsEnumerable()
+                ////必須要加上這個, 以下 產生對應的中文名稱 的部份, 才不會出錯; 因為會連結至 DB 執行那段敍述, 而出現以下錯誤
+                ////LINQ to Entities 無法辨識方法 'System.String get_Item(Int32)' 方法，而且這個方法無法轉譯成存放區運算式。
+                ////為效能考量, 最好在所有的 Where, OrderBy, Take ... 都作完以後, 才進行 .AsEnumerable()
+                //.AsEnumerable()
                 .Select(x =>
                    new BillingItemViewModel
                    {
@@ -72,8 +72,9 @@ namespace MvcHwDay01.Controllers
                        BillDate = x.Dateee,
                        Aoumnt = x.Amounttt,
                        Memo = x.Remarkkk,
-                       //產生對應的中文名稱
-                       BillTypeName = GlobalCodeMappings.BillTypes[x.Categoryyy]
+                       ////將取得中文名稱的部份, 移到 View 執行 (因為 View 已經有作 foreach 了, 就放那邊吧 ...)
+                       ////產生對應的中文名稱
+                       //BillTypeName = GlobalCodeMappings.BillTypes[x.Categoryyy]
                    });
 
             return View(biils);

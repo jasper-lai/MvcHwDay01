@@ -33,6 +33,8 @@
 
     @foreach (var item in Model)
     {
+        //將取得中文名稱的部份, 移到 View 執行
+        item.BillTypeName = GlobalCodeMappings.BillTypes[item.BillType];
         <tr>
             <td>
                 @(++i)
