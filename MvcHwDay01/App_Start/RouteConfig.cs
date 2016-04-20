@@ -15,26 +15,16 @@ namespace MvcHwDay01
 
             // 記帳本 
             routes.MapRoute(
-                name: "Billing",
-                url: "{controller}/{action}/{id}",
-                defaults: new
-                {
-                    controller = "Bill",
-                    action = "Create",
-                    id = UrlParameter.Optional
-                }
-            );
-
-            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new
                 {
-                    controller = "Home",
-                    action = "Index",
+                    controller = "Bill",    //Home
+                    action = "Create",      //Index
                     id = UrlParameter.Optional
                 }
             );
+
         }
     }
 }
