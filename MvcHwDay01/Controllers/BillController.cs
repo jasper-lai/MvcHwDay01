@@ -46,6 +46,7 @@ namespace MvcHwDay01.Controllers
         /// <param name="item"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(BillingItemViewModel item)
         {
             if (!ModelState.IsValid)
@@ -113,6 +114,7 @@ namespace MvcHwDay01.Controllers
         /// </remarks>
         [HttpPost]
         [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
             //方式一: 傳整個物件到 Service 層, 但這樣需要 3 次資料庫存取
@@ -137,7 +139,52 @@ namespace MvcHwDay01.Controllers
 
         #endregion
 
+        #region 練習 Edit 的功能
 
+        /// <summary>
+        /// 編輯資料 (HttpGet)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult Edit(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            //這裡必須用 id.Value, 不然編譯會出錯
+            BillingItemViewModel item = _billingSvc.GetSingle(id.Value);
+            if (item == null)
+            {
+                return HttpNotFound();
+            }
+
+            //定位在當初輸入資料的那個值
+            ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", item.BillType);
+            return View(item);
+        }
+
+        /// <summary>
+        /// 編輯資料 (HttpPost)
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(BillingItemViewModel item)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(item);
+            }
+
+            _billingSvc.Edit(item);
+            _billingSvc.Save();
+            return RedirectToAction("Create");
+        }
+
+        #endregion
 
     }
 }

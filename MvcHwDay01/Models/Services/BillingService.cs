@@ -208,5 +208,28 @@ namespace MvcHwDay01.Models.Services
 
         #endregion
 
+
+        #region 練習 Edit 的功能
+
+        public void Edit(BillingItemViewModel item)
+        {
+            //由資料庫再取一次舊資料
+            var oldItem = _db.AccountBooks.Find(item.Id);
+            oldItem.Categoryyy = item.BillType;
+            oldItem.Dateee = item.BillDate;
+            oldItem.Amounttt = item.Amount;
+            oldItem.Remarkkk = item.Memo;
+
+            //[問題]: 
+            //1. 雖然說, 用 ViewModel 作隔離, 完全由自己掌控要異動的欄位, 可能不需用到 TryUpdateModel(...) + includes + excludes ?
+            //2. 如果想要用的話, 應該要作在那一層? Controller or Service?
+            //(1) 如果作在 Controller 層, 因為是 TryUpdateModel() 的對象應該是 ViewModel, 如何反映到 Service 層的 Entity Framework?
+            //(2) 如果作在 Service 層, 因為 TryUpdateModel() 會將 POST 上來的資料 (ViewModel),
+            //      與由 DB 取出的資料 (Model) 作比對 //本方法裡的第一列敍述  var oldItem = _db.AccountBooks.Find(item.Id);
+            //      但因為 property name 不同, TryUpdateModel() 要如何作比對?
+        }
+
+        #endregion
+
     }
 }
