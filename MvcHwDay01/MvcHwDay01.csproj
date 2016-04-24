@@ -212,6 +212,7 @@
     <Compile Include="Models\Globals\GlobalCodeMappings.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Services\BillingService.cs" />
     <Compile Include="Models\SkillTreeHomeworkModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

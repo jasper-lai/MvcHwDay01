@@ -12,6 +12,17 @@ namespace MvcHwDay01.Models
     {
 
         /// <summary>
+        /// 唯一編號
+        /// </summary>
+        /// <remarks>
+        /// 加入原因:
+        /// 1. 新增(Create): 讓 ViewModel 在 Controller 準備好, 才丟到 Service 層
+        /// 2. 修改(Edit) / 刪除(Delete): 需要 PKEY 作處理
+        /// </remarks>
+        [Display(Name = "唯一編號")]
+        public Guid Id { get; set; }
+
+        /// <summary>
         /// 類別
         /// </summary>
         /// <remarks>
@@ -35,7 +46,7 @@ namespace MvcHwDay01.Models
         /// 金額
         /// </summary>
         [Display(Name = "金額")]
-        public int Aoumnt { get; set; }
+        public int Amount { get; set; }
 
         /// <summary>
         /// 備註
