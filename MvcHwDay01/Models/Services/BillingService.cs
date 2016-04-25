@@ -141,17 +141,19 @@ namespace MvcHwDay01.Models.Services
 
         public void Delete(BillingItemViewModel item)
         {
-            var acc = new AccountBook
-            {
-                Id = item.Id,
-                Categoryyy = item.BillType,
-                Dateee = item.BillDate,
-                Amounttt = item.Amount,
-                Remarkkk = item.Memo
-            };
 
             ////狀況一: 
             ////錯誤訊息: The object cannot be deleted because it was not found in the ObjectStateManager 
+            ////例外發生點: _db.AccountBooks.Remove(acc);
+            ////推測原因: 這裡 new 的是一般的物件, 沒有被加入 dbcontext; 但即使包裝成 Entry 物件 (狀況二, 狀況三), 還是有另外的問題
+            //var acc = new AccountBook
+            //{
+            //    Id = item.Id,
+            //    Categoryyy = item.BillType,
+            //    Dateee = item.BillDate,
+            //    Amounttt = item.Amount,
+            //    Remarkkk = item.Memo
+            //};
             //_db.AccountBooks.Remove(acc);
 
             ////狀況二:
@@ -160,7 +162,15 @@ namespace MvcHwDay01.Models.Services
             ////錯誤訊息: {"附加類型 'MvcHwDay01.Models.AccountBook' 的實體失敗，因為另一個相同類型的實體已經有相同的主索引鍵值。如果圖形中的任何實體有衝突的索引值鍵，在使用 'Attach' 方法或將實體的狀態設為 'Unchanged' 或 'Modified' 時，就可能發生這種狀況。
             ////          原因可能是有些實體是新增的，尚未收到資料庫產生的索引鍵值。如有這種狀況，請使用 'Add' 方法或 'Added' 實體狀態來追蹤圖形，然後再視需要將非新增實體的狀態設為 'Unchanged' 或 'Modified'。"}
             ////
-            ////原因推測: 在 Controller 的 DeleteConfirm() 裡, 有呼叫 _billingSvc.GetSingle(), 在整個 dbcontext 裡, 已存在一筆資料...
+            ////推測原因: 在 Controller 的 DeleteConfirm() 裡, 有呼叫 _billingSvc.GetSingle(), 在整個 dbcontext 裡, 已存在一筆資料...
+            //var acc = new AccountBook
+            //{
+            //    Id = item.Id,
+            //    Categoryyy = item.BillType,
+            //    Dateee = item.BillDate,
+            //    Amounttt = item.Amount,
+            //    Remarkkk = item.Memo
+            //};
             //var entry = _db.Entry<AccountBook>(acc);
             //if (entry.State == EntityState.Detached)
             //{
@@ -174,6 +184,15 @@ namespace MvcHwDay01.Models.Services
             ////例外發生點: _db.AccountBooks.Attach(acc);
             ////錯誤訊息: {"附加類型 'MvcHwDay01.Models.AccountBook' 的實體失敗，因為另一個相同類型的實體已經有相同的主索引鍵值。如果圖形中的任何實體有衝突的索引值鍵，在使用 'Attach' 方法或將實體的狀態設為 'Unchanged' 或 'Modified' 時，就可能發生這種狀況。
             ////          原因可能是有些實體是新增的，尚未收到資料庫產生的索引鍵值。如有這種狀況，請使用 'Add' 方法或 'Added' 實體狀態來追蹤圖形，然後再視需要將非新增實體的狀態設為 'Unchanged' 或 'Modified'。"}
+            ////推測原因: 在 Controller 的 DeleteConfirm() 裡, 有呼叫 _billingSvc.GetSingle(), 在整個 dbcontext 裡, 已存在一筆資料...
+            //var acc = new AccountBook
+            //{
+            //    Id = item.Id,
+            //    Categoryyy = item.BillType,
+            //    Dateee = item.BillDate,
+            //    Amounttt = item.Amount,
+            //    Remarkkk = item.Memo
+            //};
             //bool oldValidateOnSaveEnabled = _db.Configuration.ValidateOnSaveEnabled;
             //try
             //{
@@ -193,10 +212,10 @@ namespace MvcHwDay01.Models.Services
             //狀況四: 看來是可以運作的方式
             //作法原理: 重新由 DB 讀一次後, 再作 Remove
             //副作用: 由 DB 再讀取一次
-            var acc2 = _db.AccountBooks.Find(item.Id);
-            _db.AccountBooks.Remove(acc2);
+            var acc = _db.AccountBooks.Find(item.Id);
+            _db.AccountBooks.Remove(acc);
 
-            ////[問題]: 怎麼作才是比較好的方式, 可以避開再由資料庫讀一次的問題?
+            ////[問題]: 怎麼作才是比較好的方式, 因為手上已經有那筆需被移除的資料了, 實在不需再由 DB 再取一次
         }
 
 
