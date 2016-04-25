@@ -13,22 +13,23 @@
 </p>*@
 <table class="table">
     <tr>
-        <th>
+        <th class="col-md-1">
             編號:#
         </th>
-        <th>
+        <th class="col-md-1">
             @Html.DisplayNameFor(model => model.BillTypeName)
         </th>
-        <th>
+        <th class="col-md-1">
             @Html.DisplayNameFor(model => model.BillDate)
         </th>
-        <th>
+        <th class="col-md-1">
             @Html.DisplayNameFor(model => model.Amount)
         </th>
-        <th>
+        <th class="col-md-6">
             @Html.DisplayNameFor(model => model.Memo)
         </th>
-        <th></th>
+        <th class="col-md-2">
+        </th>
     </tr>
 
     @foreach (var item in Model)
@@ -52,7 +53,7 @@
                 @Html.DisplayFor(modelItem => item.Memo)
             </td>
             <td>
-                @Html.ActionLink("編輯", "Edit", new { id = item.Id }) 
+                @Html.ActionLink("編輯", "Edit", new { id = item.Id })
                 @Html.ActionLink("刪除", "Delete", new { id = item.Id })
             </td>
         </tr>

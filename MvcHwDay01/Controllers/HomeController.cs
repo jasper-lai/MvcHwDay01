@@ -26,5 +26,10 @@ namespace MvcHwDay01.Controllers
 
             return View();
         }
+
+        public ActionResult About2()
+        {
+            return View();
+        }
     }
 }
