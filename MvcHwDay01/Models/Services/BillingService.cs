@@ -238,12 +238,29 @@ namespace MvcHwDay01.Models.Services
 
         public void Edit(BillingItemViewModel item)
         {
-            //由資料庫再取一次舊資料
-            var oldItem = _db.AccountBooks.Find(item.Id);
-            oldItem.Categoryyy = item.BillType;
-            oldItem.Dateee = item.BillDate;
-            oldItem.Amounttt = item.Amount;
-            oldItem.Remarkkk = item.Memo;
+            ////方式一: 由資料庫再取一次舊資料
+            //var oldItem = _db.AccountBooks.Find(item.Id);
+            //oldItem.Categoryyy = item.BillType;
+            //oldItem.Dateee = item.BillDate;
+            //oldItem.Amounttt = item.Amount;
+            //oldItem.Remarkkk = item.Memo;
+
+            //方式二: 採用 Attach 的方式作處理, 不用再先到資料庫取一次舊資料了
+            var acc = new AccountBook
+            {
+                Id = item.Id,
+                Categoryyy = item.BillType,
+                Dateee = item.BillDate,
+                Amounttt = item.Amount,
+                Remarkkk = item.Memo
+            };
+
+            var entry = _db.Entry<AccountBook>(acc);
+            if (entry.State == EntityState.Detached)
+            {
+                _db.AccountBooks.Attach(acc);
+            }
+            entry.State = EntityState.Modified;
 
             //[問題]: 
             //1. 雖然說, 用 ViewModel 作隔離, 完全由自己掌控要異動的欄位, 可能不需用到 TryUpdateModel(...) + includes + excludes ?
