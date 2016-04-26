@@ -221,7 +221,13 @@ namespace MvcHwDay01.Models.Services
 
         public void DeleteById(Guid id)
         {
-            var acc = _db.AccountBooks.Find(id);
+            ////方式一
+            //var acc = _db.AccountBooks.Find(id);
+            //_db.AccountBooks.Remove(acc);
+
+            //方式二
+            var acc = new AccountBook { Id = id };
+            _db.AccountBooks.Attach(acc);
             _db.AccountBooks.Remove(acc);
         }
 

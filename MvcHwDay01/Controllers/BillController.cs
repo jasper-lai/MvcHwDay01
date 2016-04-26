@@ -120,21 +120,17 @@ namespace MvcHwDay01.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            //方式一: 傳整個物件到 Service 層, 但這樣需要 3 次資料庫存取
-            //(1) _billingSvc.GetSingle(id)
-            //(2) in Service: var acc2 = _db.AccountBooks.Find(item.Id);
-            //(3) _billingSvc.Save()
-            var item = _billingSvc.GetSingle(id);
-            _billingSvc.Delete(item);
+            ////方式一: 傳整個物件到 Service 層, 但這樣需要 3 次資料庫存取
+            ////(1) _billingSvc.GetSingle(id)
+            ////(2) in Service: var acc2 = _db.AccountBooks.Find(item.Id);
+            ////(3) _billingSvc.Save()
+            //var item = _billingSvc.GetSingle(id);
+            //_billingSvc.Delete(item);
 
-            ////方式二: 只需傳 Id 到 Service 層, 但這樣需要 2 次的資料庫存取
-            ////(1) in Service: var acc = _db.AccountBooks.Find(id);
-            ////(2) _billingSvc.Save()
-            //_billingSvc.DeleteById(id);
-
-            //------------------------------------------------------------
-            //[問題] 有沒有辦法直接刪掉? 只要一次的資料庫存取, 類似 DELETE ... FROM ... WHERE ...
-            //------------------------------------------------------------
+            //方式二: 只需傳 Id 到 Service 層, 
+            //原本作法: 在 Servcie 層呼叫了 Find(id), 才 Remove(); 最後才到本程式下方的 billingSvc.Save(); 會有 2 次的資料庫存取.
+            //新作法:   經由 91 老師的提示, 目前對資料庫的存取, 只需一次就 OK 了.
+            _billingSvc.DeleteById(id);
 
             _billingSvc.Save();
             return RedirectToAction("Create");
