@@ -1,0 +1,11 @@
+﻿@helper HightLightForBillType(string billTypeName)
+{
+    if (billTypeName == "支出")
+    {
+        <span style="color:red">@billTypeName</span>
+    }
+    else
+    {
+        <span style="color:blue">@billTypeName</span>
+    }
+}

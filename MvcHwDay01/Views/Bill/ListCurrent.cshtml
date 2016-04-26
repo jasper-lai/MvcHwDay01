@@ -45,7 +45,8 @@
                 @(++i)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BillTypeName)
+                @*@Html.DisplayFor(modelItem => item.BillTypeName)*@
+                @BillingHelper.HightLightForBillType(item.BillTypeName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BillDate)

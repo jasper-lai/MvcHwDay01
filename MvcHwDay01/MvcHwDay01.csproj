@@ -265,6 +265,7 @@
       <DependentUpon>SkillTreeHomeworkModel.edmx</DependentUpon>
     </Content>
     <Content Include="Scripts\billdate.validate.js" />
+    <Content Include="App_Code\BillingHelper.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
