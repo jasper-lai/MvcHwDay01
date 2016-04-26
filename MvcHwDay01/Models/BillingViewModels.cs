@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using MvcHwDay01.Models.Attributes;
 
 namespace MvcHwDay01.Models
 {
@@ -28,6 +29,7 @@ namespace MvcHwDay01.Models
         /// <remarks>
         /// 0.支出, 1.收入
         /// </remarks>
+        [Required]
         [Display(Name = "類別")]
         public int BillType { get; set; }
 
@@ -37,22 +39,30 @@ namespace MvcHwDay01.Models
         /// <remarks>
         /// 
         /// </remarks>
+        [Required]
         [Display(Name = "日期")]
         [DataType(DataType.Date)]
+        //[Range(typeof(DateTime),"2016/04/01", "2016/04/30", ErrorMessage = "{0} 欄位不可大於今日")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DateMustLessOrEqualThanToday]
         public DateTime BillDate { get; set; }
 
         /// <summary>
         /// 金額
         /// </summary>
+        //[RegularExpression(@"\d+", ErrorMessage = "{0} 欄位與指定的數字格式不符")]
+        [Required]
         [Display(Name = "金額")]
+        [Range(1, int.MaxValue, ErrorMessage ="{0} 欄位必須為正整數")]
         public int Amount { get; set; }
 
         /// <summary>
         /// 備註
         /// </summary>
+        [Required]
         [DataType(DataType.MultilineText)]
         [Display(Name = "備註")]
+        [StringLength(100, ErrorMessage = "{0} 欄位最多100個字元")]
         public string Memo { get; set; }
 
         /// <summary>

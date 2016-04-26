@@ -49,6 +49,11 @@ namespace MvcHwDay01.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(BillingItemViewModel item)
         {
+
+            //定位在當初輸入資料的那個值
+            //不論 ModelState 是否為 Valid, 都要執行, 不然萬一 Model 驗證失敗, 就沒有 SelectList 可以用, 會造成例外 ...
+            ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", item.BillType);
+
             if (!ModelState.IsValid)
             {
                 return View(item);
@@ -59,8 +64,6 @@ namespace MvcHwDay01.Controllers
             _billingSvc.Add(item);
             _billingSvc.Save();
 
-            //定位在當初輸入資料的那個值
-            ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", item.BillType);
             return View();
         }
 
@@ -174,6 +177,9 @@ namespace MvcHwDay01.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(BillingItemViewModel item)
         {
+            //定位在當初輸入資料的那個值
+            ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", item.BillType);
+
             if (!ModelState.IsValid)
             {
                 return View(item);
