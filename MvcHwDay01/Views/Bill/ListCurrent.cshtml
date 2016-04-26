@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<MvcHwDay01.Models.BillingItemViewModel>
+@using MvcHwDay01.Models.Extensions
 
 @{
     ViewBag.Title = "ListCurrent";
@@ -33,22 +34,12 @@
 
     @{
         int i = 0;
-        string memo = String.Empty;
     }
 
     @foreach (var item in Model)
     {
         //將取得中文名稱的部份, 移到 View 執行
         item.BillTypeName = GlobalCodeMappings.BillTypes[item.BillType];
-        //處理備註欄位內容過長, 導致表格破掉, 改用只取前 60 個字元, 再加 "..." 的方式
-        if (item.Memo.Length > 60)
-        {
-            memo = item.Memo.Substring(0, 60) + " ...";
-        }
-        else
-        {
-            memo = item.Memo;
-        }
         <tr>
             <td>
                 @(++i)
@@ -63,8 +54,9 @@
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>
             <td>
+                @*//處理備註欄位內容過長, 導致表格破掉, 改用只取前 60 個字元, 再加 "..." 的方式*@
                 @*@Html.DisplayFor(modelItem => item.Memo)*@
-                @memo
+                @item.Memo.SubstringEx(0,60)
             </td>
             <td>
                 @Html.ActionLink("編輯", "Edit", new { id = item.Id })
