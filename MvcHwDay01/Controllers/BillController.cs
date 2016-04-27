@@ -130,10 +130,17 @@ namespace MvcHwDay01.Controllers
             //方式二: 只需傳 Id 到 Service 層, 
             //原本作法: 在 Servcie 層呼叫了 Find(id), 才 Remove(); 最後才到本程式下方的 billingSvc.Save(); 會有 2 次的資料庫存取.
             //新作法:   經由 91 老師的提示, 目前對資料庫的存取, 只需一次就 OK 了.
-            _billingSvc.DeleteById(id);
-
-            _billingSvc.Save();
-            return RedirectToAction("Create");
+            try
+            {
+                _billingSvc.DeleteById(id);
+                _billingSvc.Save();
+                return RedirectToAction("Create");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View();
+            }
         }
 
         #endregion
@@ -181,9 +188,17 @@ namespace MvcHwDay01.Controllers
                 return View(item);
             }
 
-            _billingSvc.Edit(item);
-            _billingSvc.Save();
-            return RedirectToAction("Create");
+            try
+            {
+                _billingSvc.Edit(item);
+                _billingSvc.Save();
+                return RedirectToAction("Create");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(item);
+            }
         }
 
         #endregion

@@ -218,17 +218,22 @@ namespace MvcHwDay01.Models.Services
             ////[問題]: 怎麼作才是比較好的方式, 因為手上已經有那筆需被移除的資料了, 實在不需再由 DB 再取一次
         }
 
-
         public void DeleteById(Guid id)
         {
-            ////方式一
-            //var acc = _db.AccountBooks.Find(id);
-            //_db.AccountBooks.Remove(acc);
-
-            //方式二
-            var acc = new AccountBook { Id = id };
-            _db.AccountBooks.Attach(acc);
+            //註: 因為是網頁線上程式, 不是批次, 最好確認一下前端輸入的資料, 確定資料是否存在, 才作刪除.
+            //    以本Homework 的功能而言, 效能不是最大的考量因素, 安全性比較需要考慮
+            //方式一
+            var acc = _db.AccountBooks.Find(id);    //萬一找不到時, acc 會是 null
+            if (null == acc)
+            {
+                throw new Exception("您欲刪除的資料不存在, 請檢查是否已被刪除.");
+            }
             _db.AccountBooks.Remove(acc);
+
+            ////方式二
+            //var acc = new AccountBook { Id = id };
+            //_db.AccountBooks.Attach(acc);
+            //_db.AccountBooks.Remove(acc);
         }
 
         #endregion
@@ -238,29 +243,35 @@ namespace MvcHwDay01.Models.Services
 
         public void Edit(BillingItemViewModel item)
         {
-            ////方式一: 由資料庫再取一次舊資料
-            //var oldItem = _db.AccountBooks.Find(item.Id);
-            //oldItem.Categoryyy = item.BillType;
-            //oldItem.Dateee = item.BillDate;
-            //oldItem.Amounttt = item.Amount;
-            //oldItem.Remarkkk = item.Memo;
-
-            //方式二: 採用 Attach 的方式作處理, 不用再先到資料庫取一次舊資料了
-            var acc = new AccountBook
+            //註: 因為是網頁線上程式, 不是批次, 最好確認一下前端輸入的資料, 確定資料是否存在, 才作刪除.
+            //    以本Homework 的功能而言, 效能不是最大的考量因素, 安全性比較需要考慮
+            //方式一: 由資料庫再取一次舊資料
+            var oldItem = _db.AccountBooks.Find(item.Id);
+            if (null == oldItem)
             {
-                Id = item.Id,
-                Categoryyy = item.BillType,
-                Dateee = item.BillDate,
-                Amounttt = item.Amount,
-                Remarkkk = item.Memo
-            };
-
-            var entry = _db.Entry<AccountBook>(acc);
-            if (entry.State == EntityState.Detached)
-            {
-                _db.AccountBooks.Attach(acc);
+                throw new Exception("您欲修改的資料不存在, 請檢查是否已被刪除.");
             }
-            entry.State = EntityState.Modified;
+            oldItem.Categoryyy = item.BillType;
+            oldItem.Dateee = item.BillDate;
+            oldItem.Amounttt = item.Amount;
+            oldItem.Remarkkk = item.Memo;
+
+            ////方式二: 採用 Attach 的方式作處理, 不用再先到資料庫取一次舊資料了
+            //var acc = new AccountBook
+            //{
+            //    Id = item.Id,
+            //    Categoryyy = item.BillType,
+            //    Dateee = item.BillDate,
+            //    Amounttt = item.Amount,
+            //    Remarkkk = item.Memo
+            //};
+
+            //var entry = _db.Entry<AccountBook>(acc);
+            //if (entry.State == EntityState.Detached)
+            //{
+            //    _db.AccountBooks.Attach(acc);
+            //}
+            //entry.State = EntityState.Modified;
 
             //[問題]: 
             //1. 雖然說, 用 ViewModel 作隔離, 完全由自己掌控要異動的欄位, 可能不需用到 TryUpdateModel(...) + includes + excludes ?
