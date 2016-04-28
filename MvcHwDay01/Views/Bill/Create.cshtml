@@ -6,10 +6,23 @@
 
 @*<h2>Create</h2>*@
 
-@using (Html.BeginForm()) 
+<div id="failure" class="alert alert-warning" role="alert" style="display:none">
+</div>
+
+@*@using (Html.BeginForm())*@
+@using (Ajax.BeginForm("CreateWithAjax", new AjaxOptions
+{
+    HttpMethod = "Post",
+    LoadingElementId = "load",
+    UpdateTargetId = "billings",
+    OnBegin = "ajax_begin",
+    OnSuccess = "ajax_success",
+    OnFailure = "ajax_failure",
+    //Confirm = "Are you sure?",
+}))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         @*<h4>BillingItemViewModel</h4>*@
         <hr />
@@ -18,7 +31,7 @@
             @Html.LabelFor(model => model.BillType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @*@Html.EditorFor(model => model.BillType, new { htmlAttributes = new { @class = "form-control" } })*@
-                @Html.DropDownListFor(model => model.BillType, 
+                @Html.DropDownListFor(model => model.BillType,
                                     (SelectList)ViewBag.BillTypes,
                                     new { htmlAttributes = new { @class = "form-control" } }
                     )
@@ -58,12 +71,50 @@
     </div>
 }
 
-@Html.Action("ListCurrent")
+<div id="load" class="alert alert-warning" role="alert" style="display:none">
+    @(DateTime.Now) 處理中, 請稍候 ...
+</div>
+
+<div id="success" class="alert alert-warning" role="alert" style="display:none">
+    @(DateTime.Now) 處理成功 ...
+</div>
+
+<div id="billings">
+    @Html.Action("ListCurrent")
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryajax")
+
+    <script type="text/javascript">
+
+        function ajax_begin()
+        {
+            $("#failure").hide();
+            $("#failure").empty();
+            return true;
+        }
+
+        function ajax_success(result) {
+            $("#success").fadeIn(2000);
+            $("#success").fadeOut(2000);
+        }
+
+        function ajax_failure(result) {
+            //$("#failure").fadeIn(2000);
+            //$("#failure").fadeOut(2000);
+            var obj = $.parseJSON(result.responseText);
+            //列舉每一個錯誤訊息
+            $.each(obj, function (i, item) {
+                $("<ul></ul>").html("<li></li>").html(item).appendTo("#failure");
+            });
+            $("#failure").show();
+        }
+
+    </script>
 }
 
 @*<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>*@
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@

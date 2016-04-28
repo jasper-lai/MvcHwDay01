@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using MvcHwDay01.Models;
 using MvcHwDay01.Models.Services;
 using System.Net;
+using System.Threading;
 
 namespace MvcHwDay01.Controllers
 {
@@ -67,6 +68,44 @@ namespace MvcHwDay01.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateWithAjax(BillingItemViewModel item)
+        {
+            //定位在當初輸入資料的那個值
+            //不論 ModelState 是否為 Valid, 都要執行, 不然萬一 Model 驗證失敗, 就沒有 SelectList 可以用, 會造成例外 ...
+            ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", item.BillType);
+            Thread.Sleep(3 * 1000); //暫停一下, 看效果
+
+            if (!ModelState.IsValid)
+            {
+                //不知應該如何處理錯誤訊息 (in AJAX Helper) ...
+                //有試過 return View("Create", item); 但發現畫面會亂掉
+                //
+                List<string> errors = new List<string>();
+                foreach (ModelState err in ModelState.Values)
+                {
+                    foreach (ModelError errmsg in err.Errors)
+                    {
+                        errors.Add(errmsg.ErrorMessage);
+                    }
+                }
+
+                //以下參考 ...
+                //http://stackoverflow.com/questions/18763993/send-exception-message-in-ajax-beginform-mvc-4-scenario
+                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;    //強迫前端執行 OnFailure ...
+                return Json(errors);
+            }
+
+            //呼叫 Service 層提供的功能
+            item.Id = Guid.NewGuid();
+            _billingSvc.Add(item);
+            _billingSvc.Save();
+
+            var bills = _billingSvc.GetTopN(5);
+            return PartialView("ListCurrent", bills);
+        }
+
         /// <summary>
         /// 列出資料 (ChildActionOnly)
         /// </summary>
@@ -74,9 +113,9 @@ namespace MvcHwDay01.Controllers
         [ChildActionOnly]
         public ActionResult ListCurrent()
         {
-            //取得最近的 20 筆資料, 依日期降冪
+            //取得最近的 5 筆資料, 依日期降冪
             //呼叫 Service 層提供的資料查詢功能
-            var bills = _billingSvc.GetTopN(20);
+            var bills = _billingSvc.GetTopN(5);
 
             return View(bills);
         }
