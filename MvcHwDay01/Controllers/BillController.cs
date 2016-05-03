@@ -80,22 +80,53 @@ namespace MvcHwDay01.Controllers
 
             if (!ModelState.IsValid)
             {
-                //不知應該如何處理錯誤訊息 (in AJAX Helper) ...
-                //有試過 return View("Create", item); 但發現畫面會亂掉
-                //
-                List<string> errors = new List<string>();
-                foreach (ModelState err in ModelState.Values)
-                {
-                    foreach (ModelError errmsg in err.Errors)
-                    {
-                        errors.Add(errmsg.ErrorMessage);
-                    }
-                }
-
-                //以下參考 ...
-                //http://stackoverflow.com/questions/18763993/send-exception-message-in-ajax-beginform-mvc-4-scenario
-                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;    //強迫前端執行 OnFailure ...
+                //參考 https://gist.github.com/jpoehls/2230255 取得錯誤的作法
+                var errors = ModelState
+                                .Where(x => x.Value.Errors.Count > 0)
+                                .Select(d => new AjaxErrorViewModel
+                                {
+                                    ClientId = d.Key,
+                                    ErrorMessage = d.Value.Errors.FirstOrDefault().ErrorMessage
+                                });
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json(errors);
+
+                #region 參考 91 老師的實作方式
+                //var errorFields = ModelState.Where(d => d.Value.Errors.Any())
+                //     .Select(x => new { x.Key, x.Value.Errors });
+                //var errors = new List<AjaxErrorViewModel>();
+                //foreach (var err in errorFields)
+                //{
+                //    errors.Add(err.Errors.Select(
+                //        d => new AjaxErrorViewModel()
+                //        {
+                //            ClientId = err.Key,
+                //            ErrorMessage = d.ErrorMessage
+                //        }).FirstOrDefault());
+                //}
+                //Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                //return Json(errors);
+                #endregion
+
+                #region 最原始的作法
+                ////不知應該如何處理錯誤訊息 (in AJAX Helper) ...
+                ////有試過 return View("Create", item); 但發現畫面會亂掉
+                ////
+                //List<string> errors = new List<string>();
+                //foreach (ModelState err in ModelState.Values)
+                //{
+                //    foreach (ModelError errmsg in err.Errors)
+                //    {
+                //        errors.Add(errmsg.ErrorMessage);
+                //    }
+                //}
+
+                ////以下參考 ...
+                ////http://stackoverflow.com/questions/18763993/send-exception-message-in-ajax-beginform-mvc-4-scenario
+                //Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;    //強迫前端執行 OnFailure ...
+                //return Json(errors);
+                #endregion
+
             }
 
             //呼叫 Service 層提供的功能

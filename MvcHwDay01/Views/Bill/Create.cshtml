@@ -86,6 +86,7 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryajax")
+    <script type="text/javascript" src="~/Scripts/site.js"></script>
 
     <script type="text/javascript">
 
@@ -104,12 +105,16 @@
         function ajax_failure(result) {
             //$("#failure").fadeIn(2000);
             //$("#failure").fadeOut(2000);
-            var obj = $.parseJSON(result.responseText);
-            //列舉每一個錯誤訊息
-            $.each(obj, function (i, item) {
-                $("<ul></ul>").html("<li></li>").html(item).appendTo("#failure");
-            });
-            $("#failure").show();
+
+            //var obj = $.parseJSON(result.responseText);
+            ////列舉每一個錯誤訊息
+            //$.each(obj, function (i, item) {
+            //    $("<ul></ul>").html("<li></li>").html(item).appendTo("#failure");
+            //});
+            //$("#failure").show();
+
+            //參考 91 老師的實作方式, 以將錯誤訊息呈現在對應的欄位下方
+            ajaxFailedFunc(result);
             enableButtons();
         }
 
@@ -138,6 +143,7 @@
         });
 
     </script>
+
 }
 
 @*<div>
