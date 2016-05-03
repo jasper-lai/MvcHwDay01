@@ -65,7 +65,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="送出" class="btn btn-default" />
+                <input id="btnGo" type="submit" value="送出" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -89,8 +89,7 @@
 
     <script type="text/javascript">
 
-        function ajax_begin()
-        {
+        function ajax_begin() {
             $("#failure").hide();
             $("#failure").empty();
             return true;
@@ -99,6 +98,7 @@
         function ajax_success(result) {
             $("#success").fadeIn(2000);
             $("#success").fadeOut(2000);
+            enableButtons();
         }
 
         function ajax_failure(result) {
@@ -110,7 +110,32 @@
                 $("<ul></ul>").html("<li></li>").html(item).appendTo("#failure");
             });
             $("#failure").show();
+            enableButtons();
         }
+
+        function enableButtons() {
+            //[問題]: 為何用 this 去找, 會找不到?
+            //var buttons = $(this).find('[type="submit"]');
+            var buttons = $("form").find('[type="submit"]');
+            buttons.each(function (btn) {
+                $(buttons[btn]).prop('disabled', false);
+            });
+        }
+
+        //http://www.hackered.co.uk/articles/asp-net-mvc-query-preventing-multiple-clicks-by-disabling-submit-buttons
+        //以下這段程式, 不論 Html.BeginForm() 或 Ajax.BeginForm() 都會呼叫到
+        $(document).on('submit', 'form', function () {
+            var buttons = $(this).find('[type="submit"]');
+            if ($(this).valid()) {
+                buttons.each(function (btn) {
+                    $(buttons[btn]).prop('disabled', true);
+                });
+            } else {
+                buttons.each(function (btn) {
+                    $(buttons[btn]).prop('disabled', false);
+                });
+            }
+        });
 
     </script>
 }

@@ -54,6 +54,7 @@ namespace MvcHwDay01.Controllers
             //定位在當初輸入資料的那個值
             //不論 ModelState 是否為 Valid, 都要執行, 不然萬一 Model 驗證失敗, 就沒有 SelectList 可以用, 會造成例外 ...
             ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", item.BillType);
+            Thread.Sleep(3 * 1000); //暫停一下, 看效果
 
             if (!ModelState.IsValid)
             {
