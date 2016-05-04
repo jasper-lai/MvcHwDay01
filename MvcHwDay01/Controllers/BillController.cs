@@ -10,6 +10,7 @@ using System.Threading;
 
 namespace MvcHwDay01.Controllers
 {
+    [Authorize]
     public class BillController : Controller
     {
 

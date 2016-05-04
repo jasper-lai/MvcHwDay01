@@ -9,6 +9,8 @@ using System.Web.Mvc;
 
 namespace MvcHwDay01.Areas.Admin.Controllers
 {
+
+    [Authorize(Roles ="admin")]
     public class BillController : Controller
     {
 

@@ -18,14 +18,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("我的記帳本", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("我的記帳本", "Index", new { Controller = "Home", Area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @*<li>@Html.ActionLink("建立帳務資料", "Create", "Bill")</li>*@
-                    <li>@Html.ActionLink("首頁", "Index", "Home")</li>
-                    <li>@Html.ActionLink("關於", "About", "Home")</li>
-                    <li>@Html.ActionLink("連絡方式", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("首頁", "Index", new { Controller = "Home", Area = "" })</li>
+                    <li>@Html.ActionLink("關於", "About", new { Controller = "Home", Area = "" })</li>
+                    <li>@Html.ActionLink("連絡方式", "Contact", new { Controller = "Home", Area = "" })</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
