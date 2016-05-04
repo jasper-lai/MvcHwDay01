@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using MvcHwDay01.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace MvcHwDay01.Controllers
 {
@@ -17,15 +18,18 @@ namespace MvcHwDay01.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationRoleManager _roleManager;
 
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
         {
-            UserManager = userManager;
-            SignInManager = signInManager;
+            this.UserManager = userManager;
+            this.SignInManager = signInManager;
+            //在 AccountController 的建構子, 加入 roleManager 物件
+            this.RoleManager = roleManager;
         }
 
         public ApplicationSignInManager SignInManager
@@ -49,6 +53,18 @@ namespace MvcHwDay01.Controllers
             private set
             {
                 _userManager = value;
+            }
+        }
+
+        public ApplicationRoleManager RoleManager
+        {
+            get
+            {
+                return _roleManager ?? HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
+            }
+            private set
+            {
+                _roleManager = value;
             }
         }
 
@@ -156,12 +172,31 @@ namespace MvcHwDay01.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // 如需如何啟用帳戶確認和密碼重設的詳細資訊，請造訪 http://go.microsoft.com/fwlink/?LinkID=320771
                     // 傳送包含此連結的電子郵件
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "確認您的帳戶", "請按一下此連結確認您的帳戶 <a href=\"" + callbackUrl + "\">這裏</a>");
+
+                    //[說明] 預計的角色及使用者 
+                    //Role: admin
+                    //* admin@example.com / aA123456!
+                    //Role: test
+                    //* test@example.com / aA123456! 
+
+                    //預設的角色名稱
+                    var roleName = "test";
+
+                    //判斷角色是否存在
+                    if (RoleManager.RoleExists(roleName) == false)
+                    {
+                        //角色不存在,建立角色
+                        var role = new IdentityRole(roleName);
+                        await RoleManager.CreateAsync(role);
+                    }
+                    //將使用者加入該角色
+                    await UserManager.AddToRoleAsync(user.Id, roleName);
 
                     return RedirectToAction("Index", "Home");
                 }
