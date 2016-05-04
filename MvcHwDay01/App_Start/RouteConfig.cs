@@ -13,16 +13,17 @@ namespace MvcHwDay01
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            // 記帳本 
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new
                 {
-                    controller = "Bill",    //Home
-                    action = "Create",      //Index
+                    //一切還是回到 HomeController, 再按 Button 到欲執行的頁面
+                    controller = "Home",    //Bill
+                    action = "Index",      //Create
                     id = UrlParameter.Optional
-                }
+                },
+                namespaces: new[] { "MvcHwDay01.Controllers" }
             );
 
         }

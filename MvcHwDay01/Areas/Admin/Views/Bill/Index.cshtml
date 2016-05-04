@@ -2,15 +2,15 @@
 @using MvcHwDay01.Models.Extensions
 
 @{
-    ViewBag.Title = "ListCurrent";
-    Layout = null;
+    ViewBag.Title = "記帳資料清單";
 }
 
-@*<h2>ListCurrent</h2>*@
+<h2>記帳資料清單</h2>
 
-@*<p>
-    @Html.ActionLink("Create New", "Create")
-</p>*@
+<p>
+    @Html.ActionLink("新增記帳資料 >>", "Create", new { Controller="Bill", Area="" }, new { @class = "btn btn-primary" })
+</p>
+
 <table class="table">
     <tr>
         <th class="col-md-1">
@@ -19,14 +19,16 @@
         <th class="col-md-1">
             @Html.DisplayNameFor(model => model.BillTypeName)
         </th>
-        <th class="col-md-2">
+        <th class="col-md-1">
             @Html.DisplayNameFor(model => model.BillDate)
         </th>
-        <th class="col-md-2">
+        <th class="col-md-1">
             @Html.DisplayNameFor(model => model.Amount)
         </th>
         <th class="col-md-6">
             @Html.DisplayNameFor(model => model.Memo)
+        </th>
+        <th class="col-md-2">
         </th>
     </tr>
 
@@ -55,7 +57,11 @@
             <td>
                 @*//處理備註欄位內容過長, 導致表格破掉, 改用只取前 60 個字元, 再加 "..." 的方式*@
                 @*@Html.DisplayFor(modelItem => item.Memo)*@
-                @item.Memo.SubstringEx(0,60)
+                @item.Memo.SubstringEx(0, 60)
+            </td>
+            <td>
+                @Html.ActionLink("編輯", "Edit", new { id = item.Id })
+                @Html.ActionLink("刪除", "Delete", new { id = item.Id })
             </td>
         </tr>
     }
