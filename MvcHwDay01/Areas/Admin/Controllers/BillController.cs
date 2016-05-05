@@ -8,11 +8,12 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using MvcHwDay01.Areas.Admin.Filters;
 
 namespace MvcHwDay01.Areas.Admin.Controllers
 {
 
-    [Authorize(Roles ="admin")]
+    [AuthorizeAdmin(Roles ="admin")]
     public class BillController : Controller
     {
 
