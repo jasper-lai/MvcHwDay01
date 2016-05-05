@@ -28,8 +28,7 @@ namespace MvcHwDay01
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                //LoginPath = new PathString("/Account/Login"),
-                LoginPath = new PathString("/Home/Index"),
+                LoginPath = new PathString("/Account/Login"),
                 Provider = new CookieAuthenticationProvider
                 {
                     // 讓應用程式在使用者登入時驗證安全性戳記。

@@ -7,10 +7,10 @@ using MvcHwDay01.Models;
 using MvcHwDay01.Models.Services;
 using System.Net;
 using System.Threading;
+using MvcHwDay01.Filters;
 
 namespace MvcHwDay01.Controllers
 {
-    [Authorize]
     public class BillController : Controller
     {
 
@@ -72,6 +72,7 @@ namespace MvcHwDay01.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AuthorizePlus] 
         public ActionResult CreateWithAjax(BillingItemViewModel item)
         {
             //定位在當初輸入資料的那個值
