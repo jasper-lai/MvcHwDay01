@@ -1,11 +1,13 @@
 ﻿using MvcHwDay01.Models;
 using MvcHwDay01.Models.Services;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace MvcHwDay01.Areas.Admin.Controllers
 {
@@ -15,6 +17,7 @@ namespace MvcHwDay01.Areas.Admin.Controllers
     {
 
         private readonly BillingService _billingSvc = null;
+        private int pageSize = 10;      //每頁10筆資料
 
         public BillController()
         {
@@ -22,13 +25,18 @@ namespace MvcHwDay01.Areas.Admin.Controllers
         }
 
         // GET: Admin/Bill
-        public ActionResult Index()
+        public ActionResult Index(int? page = 1)
         {
-            //取得最近的 30 資料, 依日期降冪
-            //呼叫 Service 層提供的資料查詢功能
-            var bills = _billingSvc.GetTopN(30);
+            ////取得最近的 30 資料, 依日期降冪
+            ////呼叫 Service 層提供的資料查詢功能
+            //var bills = _billingSvc.GetTopN(30);
 
-            return View(bills);
+            //改用 X.PagedList 處理
+            var bills = _billingSvc.GetAll();
+            int pageNumber = (page ?? 1);
+            var onePage = bills.ToList().ToPagedList(pageNumber, pageSize);
+
+            return View(onePage);
         }
 
         #region Delete 的功能

@@ -1,5 +1,14 @@
-﻿@model IEnumerable<MvcHwDay01.Models.BillingItemViewModel>
+﻿@*@model IEnumerable<MvcHwDay01.Models.BillingItemViewModel>*@
+@model IPagedList<MvcHwDay01.Models.BillingItemViewModel>
+
 @using MvcHwDay01.Models.Extensions
+
+@* [[ 分頁 ]] *@
+@section styles
+{
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+}
+
 
 @{
     ViewBag.Title = "記帳資料清單";
@@ -8,7 +17,7 @@
 <h2>記帳資料清單</h2>
 
 <p>
-    @Html.ActionLink("新增記帳資料 >>", "Create", new { Controller="Bill", Area="" }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("新增記帳資料 >>", "Create", new { Controller = "Bill", Area = "" }, new { @class = "btn btn-primary" })
 </p>
 
 <table class="table">
@@ -17,16 +26,16 @@
             編號:#
         </th>
         <th class="col-md-1">
-            @Html.DisplayNameFor(model => model.BillTypeName)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().BillTypeName)
         </th>
         <th class="col-md-1">
-            @Html.DisplayNameFor(model => model.BillDate)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().BillDate)
         </th>
         <th class="col-md-1">
-            @Html.DisplayNameFor(model => model.Amount)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Amount)
         </th>
         <th class="col-md-6">
-            @Html.DisplayNameFor(model => model.Memo)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Memo)
         </th>
         <th class="col-md-2">
         </th>
@@ -67,3 +76,6 @@
     }
 
 </table>
+
+@* [[ 分頁 ]] *@
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
