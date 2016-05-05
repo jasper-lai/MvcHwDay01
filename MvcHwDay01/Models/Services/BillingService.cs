@@ -110,6 +110,17 @@ namespace MvcHwDay01.Models.Services
         }
 
         /// <summary>
+        /// 取回總筆數, 以供分頁參考之用
+        /// </summary>
+        /// <returns></returns>
+        public int GetAllCount()
+        {
+            int result = 0;
+            result = _db.AccountBooks.Count();
+            return result;
+        }
+
+        /// <summary>
         /// 取回 N 筆資料 (先跳開前 M 筆)
         /// </summary>
         /// <param name="skip"></param>

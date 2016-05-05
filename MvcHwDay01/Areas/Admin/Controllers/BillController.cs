@@ -31,10 +31,16 @@ namespace MvcHwDay01.Areas.Admin.Controllers
             ////呼叫 Service 層提供的資料查詢功能
             //var bills = _billingSvc.GetTopN(30);
 
-            //改用 X.PagedList 處理
-            var bills = _billingSvc.GetAll();
+            ////改用 X.PagedList 處理
+            //var bills = _billingSvc.GetAll();
+            //int pageNumber = (page ?? 1);
+            //var onePage = bills.ToList().ToPagedList(pageNumber, pageSize);
+
+            //改用 StaticPagedList(), 自己去查總筆數, 及需要顯示的資料; 可以減少由 DB 取回全部資料所造成的網路流量
             int pageNumber = (page ?? 1);
-            var onePage = bills.ToList().ToPagedList(pageNumber, pageSize);
+            int totalCnt = _billingSvc.GetAllCount();
+            var bills = _billingSvc.GetSkipMTakeN(( pageNumber - 1) * pageSize, pageSize);
+            var onePage = new StaticPagedList<BillingItemViewModel>(bills, pageNumber, pageSize, totalCnt);
 
             return View(onePage);
         }
