@@ -12,12 +12,16 @@ namespace MvcHwDay01
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*",
-                        "~/Scripts/billdate.validate*"
+                        "~/Scripts/jquery.validate*"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryajax").Include(
                         "~/Scripts/jquery.unobtrusive-ajax*"
+                        ));
+
+            bundles.Add(new ScriptBundle("~/bundles/mysite").Include(
+                        "~/Scripts/billdate.validate.js",
+                        "~/Scripts/site.js"
                         ));
 
             // 使用開發版本的 Modernizr 進行開發並學習。然後，當您
