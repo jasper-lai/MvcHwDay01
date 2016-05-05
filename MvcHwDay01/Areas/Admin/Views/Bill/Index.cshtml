@@ -78,4 +78,34 @@
 </table>
 
 @* [[ 分頁 ]] *@
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+@*最簡單的分頁列樣式*@
+@*@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))*@
+
+@*複雜的分頁列樣式*@
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+    new PagedListRenderOptions
+    {
+        LinkToFirstPageFormat = "<< 第一頁",
+        LinkToPreviousPageFormat = "< 前一頁",
+        LinkToNextPageFormat = "下一頁 >",
+        LinkToLastPageFormat = "最末頁 >>",
+        DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+        DisplayLinkToLastPage = PagedListDisplayMode.Always,
+        PageCountAndCurrentLocationFormat = "第 {0} 頁 / 共 {1} 頁",
+        DisplayPageCountAndCurrentLocation = true,
+        //ItemSliceAndTotalFormat = "顯示項目: {0} ~ {1} / 共 {2} 項",
+        //DisplayItemSliceAndTotal = true,
+    })
+
+@*可以直接跳至第n頁*@
+@Html.PagedListGoToPageForm(Model, @Url.Action("Index", "Bill"),
+    new GoToFormRenderOptions
+    {
+        InputFieldName = "page",
+        InputFieldType = "number",
+        LabelFormat = "前往",
+        SubmitButtonFormat = "送出"
+    })
+
