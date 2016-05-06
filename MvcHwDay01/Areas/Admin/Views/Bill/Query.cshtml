@@ -1,0 +1,131 @@
+﻿@model MvcHwDay01.Areas.Admin.ViewModels.BillQueryViewModel
+@using MvcHwDay01.Models.Extensions
+
+@{
+    ViewBag.Title = "Query";
+}
+
+<h2>Query</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @*<h4>BillQueryViewModel</h4>*@
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.BillType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.BillType, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.BillType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="查詢" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<table class="table">
+    <tr>
+        <th class="col-md-1">
+            編號:#
+        </th>
+        <th class="col-md-1">
+            @Html.DisplayNameFor(model => model.QueryResult.FirstOrDefault().BillTypeName)
+        </th>
+        <th class="col-md-1">
+            @Html.DisplayNameFor(model => model.QueryResult.FirstOrDefault().BillDate)
+        </th>
+        <th class="col-md-1">
+            @Html.DisplayNameFor(model => model.QueryResult.FirstOrDefault().Amount)
+        </th>
+        <th class="col-md-6">
+            @Html.DisplayNameFor(model => model.QueryResult.FirstOrDefault().Memo)
+        </th>
+        <th class="col-md-2">
+        </th>
+    </tr>
+
+    @{
+        int i = 0;
+        bool hasData = false;
+    }
+
+    @if (Model.QueryResult != null)
+    {
+        foreach (var item in Model.QueryResult)
+        {
+            //將取得中文名稱的部份, 移到 View 執行
+            hasData = true;
+            item.BillTypeName = GlobalCodeMappings.BillTypes[item.BillType];
+            <tr>
+                <td>
+                    @(++i)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.BillTypeName)*@
+                    @BillingHelper.HightLightForBillType(item.BillTypeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BillDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @*//處理備註欄位內容過長, 導致表格破掉, 改用只取前 60 個字元, 再加 "..." 的方式*@
+                    @*@Html.DisplayFor(modelItem => item.Memo)*@
+                    @item.Memo.SubstringEx(0, 60)
+                </td>
+                <td>
+                    @Html.ActionLink("編輯", "Edit", new { id = item.Id })
+                    @Html.ActionLink("刪除", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+        if (!hasData)
+        {
+            <tr>
+                <td colspan="5">
+                    <span>查無資料 ...</span>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="5">
+                <span>尚未查詢 ...</span>   
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@

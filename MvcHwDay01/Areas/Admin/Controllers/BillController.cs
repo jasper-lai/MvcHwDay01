@@ -9,11 +9,12 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using MvcHwDay01.Areas.Admin.Filters;
+using MvcHwDay01.Areas.Admin.ViewModels;
 
 namespace MvcHwDay01.Areas.Admin.Controllers
 {
 
-    [AuthorizeAdmin(Roles ="admin")]
+    [AuthorizeAdmin(Roles = "admin")]
     public class BillController : Controller
     {
 
@@ -40,7 +41,7 @@ namespace MvcHwDay01.Areas.Admin.Controllers
             //改用 StaticPagedList(), 自己去查總筆數, 及需要顯示的資料; 可以減少由 DB 取回全部資料所造成的網路流量
             int pageNumber = (page ?? 1);
             int totalCnt = _billingSvc.GetAllCount();
-            var bills = _billingSvc.GetSkipMTakeN(( pageNumber - 1) * pageSize, pageSize);
+            var bills = _billingSvc.GetSkipMTakeN((pageNumber - 1) * pageSize, pageSize);
             var onePage = new StaticPagedList<BillingItemViewModel>(bills, pageNumber, pageSize, totalCnt);
 
             return View(onePage);
@@ -158,5 +159,38 @@ namespace MvcHwDay01.Areas.Admin.Controllers
 
         #endregion
 
+        #region Query 的功能
+
+        [HttpGet]
+        public ActionResult Query()
+        {
+            var obj = new BillQueryViewModel()
+            {
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Today
+            };
+            ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", -1);
+            return View(obj);
+        }
+
+        [HttpPost]
+        public ActionResult Query(BillQueryViewModel query)
+        {
+            //定位在當初輸入資料的那個值
+            ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", query.BillType);
+
+            //輸入資料驗證
+            if (!ModelState.IsValid)
+            {
+                return View(query);
+            }
+
+            //已通過資料驗證
+            query.QueryResult = _billingSvc.GetByQuery(query);
+            return View(query);
+        }
+
+        #endregion
+        
     }
 }

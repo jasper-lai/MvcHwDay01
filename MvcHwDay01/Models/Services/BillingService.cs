@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using MvcHwDay01.Areas.Admin.ViewModels;
 
 namespace MvcHwDay01.Models.Services
 {
@@ -249,7 +250,6 @@ namespace MvcHwDay01.Models.Services
 
         #endregion
 
-
         #region 練習 Edit 的功能
 
         public void Edit(BillingItemViewModel item)
@@ -291,6 +291,56 @@ namespace MvcHwDay01.Models.Services
             //(2) 如果作在 Service 層, 因為 TryUpdateModel() 會將 POST 上來的資料 (ViewModel),
             //      與由 DB 取出的資料 (Model) 作比對 //本方法裡的第一列敍述  var oldItem = _db.AccountBooks.Find(item.Id);
             //      但因為 property name 不同, TryUpdateModel() 要如何作比對?
+        }
+
+        #endregion
+
+        #region 練習 Query 的功能
+
+        public IEnumerable<BillingItemViewModel> GetByQuery(BillQueryViewModel query)
+        {
+            //建立取全部資料的 SQL
+            //註: 以下這些敍述, 都還沒有到 DB 實際存取; 只有在 View 的 foreach, 才會真正取資料
+            var bills = this.GetAll();
+
+            //再逐步下 WHERE
+            //參考: http://stackoverflow.com/questions/6353350/multiple-where-conditions-in-ef
+            if (query.BillType != null && query.BillType > -1 )
+            {
+                bills = bills.Where(x => x.BillType == query.BillType);
+            }
+
+            //假設在呼叫之前, 都已驗證過
+            if (query.StartDate.HasValue)
+            {
+                bills = bills.Where(x => x.BillDate >= query.StartDate);
+            }
+            if (query.EndDate.HasValue)
+            {
+                bills = bills.Where(x => x.BillDate <= query.EndDate);
+            }
+
+            bills = bills.OrderByDescending(x => x.BillDate);
+            return bills;
+
+            //===========================================
+            //註: 送到 SQL Server 的查詢語句範例
+            //===========================================
+            //--Region Parameters
+            //DECLARE @p0 DateTime = '2016-05-10 00:00:00.000'
+            //DECLARE @p1 DateTime = '2016-04-01 00:00:00.000'
+            //DECLARE @p2 Int = 1
+            //-- EndRegion
+            //SELECT[t0].[Id], [t0].[Categoryyy]
+            //        AS[BillType], [t0].[Dateee]
+            //        AS[BillDate], [t0].[Amounttt]
+            //        AS[Amount], [t0].[Remarkkk]
+            //        AS[Memo]
+            //FROM[AccountBook] AS[t0]
+            //WHERE([t0].[Dateee] <= @p0) AND([t0].[Dateee] >= @p1) AND([t0].[Categoryyy] = @p2)
+            //ORDER BY[t0].[Dateee]
+            //        DESC
+
         }
 
         #endregion
