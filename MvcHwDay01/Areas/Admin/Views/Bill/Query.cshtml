@@ -40,6 +40,14 @@
         </div>
 
         <div class="form-group">
+            @*@Html.LabelFor(model => model.PageIndex, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PageIndex, new { htmlAttributes = new { @class = "form-control" } })
+                @*@Html.ValidationMessageFor(model => model.PageIndex, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="查詢" class="btn btn-default" />
             </div>
@@ -125,7 +133,41 @@
 
 </table>
 
+@if (Model.QueryResult != null)
+{
+@* [[ 分頁 ]] *@
+    @*最簡單的分頁列樣式*@
+    @*@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))*@
 
-@*<div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>*@
+    @*複雜的分頁列樣式*@
+    @Html.PagedListPager(Model.QueryResult, page => Url.Action("Query", "Bill",
+    new { Area="Admin",
+          page = page
+    }),
+    new PagedListRenderOptions
+    {
+        LinkToFirstPageFormat = "<< 第一頁",
+        LinkToPreviousPageFormat = "< 前一頁",
+        LinkToNextPageFormat = "下一頁 >",
+        LinkToLastPageFormat = "最末頁 >>",
+        DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+        DisplayLinkToLastPage = PagedListDisplayMode.Always,
+        PageCountAndCurrentLocationFormat = "第 {0} 頁 / 共 {1} 頁",
+        DisplayPageCountAndCurrentLocation = true,
+        //ItemSliceAndTotalFormat = "顯示項目: {0} ~ {1} / 共 {2} 項",
+        //DisplayItemSliceAndTotal = true,
+    })
+
+    @*可以直接跳至第n頁*@
+    @Html.PagedListGoToPageForm(Model.QueryResult, @Url.Action("Query", "Bill", new { Area = "Admin" }),
+    new GoToFormRenderOptions
+    {
+        InputFieldName = "page",
+        InputFieldType = "number",
+        LabelFormat = "前往",
+        SubmitButtonFormat = "送出"
+    })
+}
+

@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using MvcHwDay01.Models;
+using PagedList;
+using System.Web.Mvc;
 
 namespace MvcHwDay01.Areas.Admin.ViewModels
 {
@@ -41,12 +43,18 @@ namespace MvcHwDay01.Areas.Admin.ViewModels
         public DateTime? EndDate { get; set; }
 
         /// <summary>
+        /// 目前檢視的頁碼
+        /// </summary>
+        [HiddenInput(DisplayValue = false)]
+        public int? PageIndex { get; set; }
+
+        /// <summary>
         /// 查詢的結果
         /// </summary>
         /// <remarks>
         /// 這樣應該可以作到: 將送出查詢條件與查詢結果放在同一個頁面
         /// </remarks>
-        public IEnumerable<BillingItemViewModel> QueryResult { get; set; }
+        public IPagedList<BillingItemViewModel> QueryResult { get; set; }
 
     }
 }
