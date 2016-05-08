@@ -38,11 +38,16 @@ namespace MvcHwDay01.Areas.Admin.Controllers
             //int pageNumber = (page ?? 1);
             //var onePage = bills.ToList().ToPagedList(pageNumber, pageSize);
 
-            //改用 StaticPagedList(), 自己去查總筆數, 及需要顯示的資料; 可以減少由 DB 取回全部資料所造成的網路流量
-            int pageNumber = (page ?? 1);
-            int totalCnt = _billingSvc.GetAllCount();
-            var bills = _billingSvc.GetSkipMTakeN((pageNumber - 1) * pageSize, pageSize);
-            var onePage = new StaticPagedList<BillingItemViewModel>(bills, pageNumber, pageSize, totalCnt);
+            ////改用 StaticPagedList(), 自己去查總筆數, 及需要顯示的資料; 可以減少由 DB 取回全部資料所造成的網路流量
+            //int pageNumber = (page ?? 1);
+            //int totalCnt = _billingSvc.GetAllCount();
+            //var bills = _billingSvc.GetSkipMTakeN((pageNumber - 1) * pageSize, pageSize);
+            //var onePage = new StaticPagedList<BillingItemViewModel>(bills, pageNumber, pageSize, totalCnt);
+
+            //最後, 還是決定交給 ToPagedList() 作處理
+            int pageNumber = (!page.HasValue ? 1 : (page.Value < 1 ? 1 : page.Value));
+            var bills = _billingSvc.GetAll();
+            var onePage = bills.ToPagedList(pageNumber, pageSize);
 
             return View(onePage);
         }
