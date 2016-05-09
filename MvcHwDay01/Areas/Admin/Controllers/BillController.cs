@@ -172,14 +172,16 @@ namespace MvcHwDay01.Areas.Admin.Controllers
             var obj = new BillQueryViewModel()
             {
                 StartDate = DateTime.Today,
-                EndDate = DateTime.Today
+                EndDate = DateTime.Today,
+                PageIndex = 1
             };
             ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", -1);
             return View(obj);
         }
 
         [HttpPost]
-        public ActionResult Query(BillQueryViewModel query, int? page = 1)
+        //public ActionResult Query(BillQueryViewModel query, int? page = 1)
+        public ActionResult Query(BillQueryViewModel query)
         {
             //定位在當初輸入資料的那個值
             ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", query.BillType);
@@ -191,6 +193,7 @@ namespace MvcHwDay01.Areas.Admin.Controllers
             }
 
             //已通過資料驗證
+            int? page = query.PageIndex;    //原本由 HttpGet 的 QueryString 取得, 改由 Form 取得
             int pageNumber = (!page.HasValue ? 1 : (page.Value < 1 ? 1 : page.Value));
             var bills = _billingSvc.GetByQuery(query);
             var result = bills.ToPagedList(pageNumber, pageSize);

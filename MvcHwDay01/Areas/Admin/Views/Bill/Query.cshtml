@@ -7,7 +7,7 @@
 
 <h2>Query</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Query", "Bill", new { Area = "Admin" }, FormMethod.Post, new { @id = "frmQuery" }))
 {
     @Html.AntiForgeryToken()
 
@@ -49,7 +49,9 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="查詢" class="btn btn-default" />
+                <input type="submit" value="查詢" class="btn btn-primary" />
+                <span></span>
+                <input type="reset" value="取消" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -126,48 +128,141 @@
     {
         <tr>
             <td colspan="5">
-                <span>尚未查詢 ...</span>   
+                <span>尚未查詢 ...</span>
             </td>
         </tr>
     }
 
 </table>
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        //#region PagedList pager html
+        //<div class="pagination-container">
+        //    <ul class="pagination">
+        //        <li class="disabled PagedList-skipToFirst"><a><< 第一頁</a></li>
+        //        <li class="disabled PagedList-skipToPrevious"><a rel="prev">< 前一頁</a></li>
+        //        <li class="disabled PagedList-pageCountAndLocation"><a>第 1 頁 / 共 7 頁</a></li>
+        //        <li class="active"><span>1</span></li>
+        //        <li><a href="/Admin/Bill/Query?page=2">2</a></li>
+        //        <li><a href="/Admin/Bill/Query?page=3">3</a></li>
+        //        <li><a href="/Admin/Bill/Query?page=4">4</a></li>
+        //        <li><a href="/Admin/Bill/Query?page=5">5</a></li>
+        //        <li><a href="/Admin/Bill/Query?page=6">6</a></li>
+        //        <li><a href="/Admin/Bill/Query?page=7">7</a></li>
+        //        <li class="PagedList-skipToNext"><a href="/Admin/Bill/Query?page=2" rel="next">下一頁 ></a></li>
+        //        <li class="PagedList-skipToLast"><a href="/Admin/Bill/Query?page=7">最末頁 >></a></li>
+        //    </ul>
+        //</div>
+        //#endregion
+
+        function postPage(page) {
+            var targetFormId = '#frmQuery';
+            $('#PageIndex').val(page);
+            //if ($(targetFormId).size() > 0) {
+            //    $('<input>')
+            //        .attr({ type: 'hidden', id: 'PageIndex', name: 'PageIndex', value: page })
+            //        .appendTo($(targetFormId));
+            //}   //end of if (...size() >0)
+            $(targetFormId).submit();
+        };   //end of postPage(page)
+
+        function setCallbackInPager() {
+            //找出頁碼, 並改為呼叫 postPage(page) 作 submit
+            $('.pagination>li>a[href]').each(function (i, item) {
+                var page = $(item).attr('href').replace('/Admin/Bill/Query?page=', '');
+                $(item).attr('href', '#').click(function () {
+                    postPage(page);
+                }); //end of click(function)
+            }); //end of each(function(i,item))
+        };
+
+        ////以下的作法是錯的, 不應在 before submit 去設定 PageIndex;
+        ////因為 postPage(page) 的 $(targetFormId).submit(); 也會執行這裡, 造成 PageIndex 永遠是 1
+        ////改為在 $(function () ... 裡面作
+        //function setSubmitInQuery(){
+        //    //在按下 [查詢] 時, 將 PageIndex 重設為 1
+        //    var targetFormId = '#frmQuery';
+        //    $(targetFormId).submit(function (e) {
+        //        if (!$(targetFormId).valid()) {
+        //            e.preventDefault(); //檢核失敗, 不再送出 Submit
+        //        }
+        //        else {
+        //            $("#PageIndex").val(1); //檢核成功, 將 PageIndex 設為 1
+        //        };
+        //    });
+        //};
+
+        function setSubmitInGoTo() {
+            //找出頁碼, 並改為呼叫 postPage(page) 作 submit
+            var gotoFormClass = '.PagedList-goToPage';
+            var frmGoTo = $(gotoFormClass);
+            var queryFormId = '#frmQuery';
+            var frmQuery = $(queryFormId);
+            var pageInput = 'input[name="page"]';
+            frmGoTo.attr('method', 'post'); //將方法改為 HttpPost
+            $(gotoFormClass).submit(function (e) {
+                var page = frmGoTo.find(pageInput).first().val();
+                postPage(page);
+                //$("#PageIndex").val(page); //檢核成功, 將 PageIndex 設為 page
+                //frmQuery.submit();
+            });
+        };
+
+        $(function () {
+            $("#PageIndex").val(1); //設定 PageIndex 的初始值為 1, 以供按下 [查詢] 之用
+            setCallbackInPager();
+            //setSubmitInQuery();
+            setSubmitInGoTo();
+        }); //end of $function()
+
+    </script>
+
+}
+
 @if (Model.QueryResult != null)
 {
-@* [[ 分頁 ]] *@
-    @*最簡單的分頁列樣式*@
-    @*@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))*@
-
-    @*複雜的分頁列樣式*@
-    @Html.PagedListPager(Model.QueryResult, page => Url.Action("Query", "Bill",
-    new { Area="Admin",
-          page = page
-    }),
-    new PagedListRenderOptions
+    if (Model.QueryResult.Count > 0)
     {
-        LinkToFirstPageFormat = "<< 第一頁",
-        LinkToPreviousPageFormat = "< 前一頁",
-        LinkToNextPageFormat = "下一頁 >",
-        LinkToLastPageFormat = "最末頁 >>",
-        DisplayLinkToFirstPage = PagedListDisplayMode.Always,
-        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
-        DisplayLinkToNextPage = PagedListDisplayMode.Always,
-        DisplayLinkToLastPage = PagedListDisplayMode.Always,
-        PageCountAndCurrentLocationFormat = "第 {0} 頁 / 共 {1} 頁",
-        DisplayPageCountAndCurrentLocation = true,
-        //ItemSliceAndTotalFormat = "顯示項目: {0} ~ {1} / 共 {2} 項",
-        //DisplayItemSliceAndTotal = true,
-    })
+        @* [[ 分頁 ]] *@
+        @*最簡單的分頁列樣式*@
+        @*@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))*@
 
-    @*可以直接跳至第n頁*@
-    @Html.PagedListGoToPageForm(Model.QueryResult, @Url.Action("Query", "Bill", new { Area = "Admin" }),
-    new GoToFormRenderOptions
-    {
-        InputFieldName = "page",
-        InputFieldType = "number",
-        LabelFormat = "前往",
-        SubmitButtonFormat = "送出"
-    })
+        @*複雜的分頁列樣式*@
+        @Html.PagedListPager(Model.QueryResult, page => Url.Action("Query", "Bill",
+        new
+        {
+            Area = "Admin",
+            page = page
+        }),
+        new PagedListRenderOptions
+        {
+            LinkToFirstPageFormat = "<< 第一頁",
+            LinkToPreviousPageFormat = "< 前一頁",
+            LinkToNextPageFormat = "下一頁 >",
+            LinkToLastPageFormat = "最末頁 >>",
+            DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+            DisplayLinkToLastPage = PagedListDisplayMode.Always,
+            PageCountAndCurrentLocationFormat = "第 {0} 頁 / 共 {1} 頁",
+            DisplayPageCountAndCurrentLocation = true,
+            //ItemSliceAndTotalFormat = "顯示項目: {0} ~ {1} / 共 {2} 項",
+            //DisplayItemSliceAndTotal = true,
+        })
+
+        @*可以直接跳至第n頁*@
+        @Html.PagedListGoToPageForm(Model.QueryResult, @Url.Action("Query", "Bill", new { Area = "Admin" }),
+        new GoToFormRenderOptions
+        {
+            InputFieldName = "page",
+            InputFieldType = "number",
+            LabelFormat = "前往",
+            SubmitButtonFormat = "送出"
+        })
+    }
 }
 
