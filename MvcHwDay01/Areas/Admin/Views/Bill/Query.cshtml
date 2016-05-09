@@ -205,10 +205,11 @@
             var pageInput = 'input[name="page"]';
             frmGoTo.attr('method', 'post'); //將方法改為 HttpPost
             $(gotoFormClass).submit(function (e) {
+                e.preventDefault();
                 var page = frmGoTo.find(pageInput).first().val();
-                postPage(page);
-                //$("#PageIndex").val(page); //檢核成功, 將 PageIndex 設為 page
-                //frmQuery.submit();
+                $("#PageIndex").val(page); //檢核成功, 將 PageIndex 設為 page
+                frmQuery.submit();
+                //postPage(page);
             });
         };
 
