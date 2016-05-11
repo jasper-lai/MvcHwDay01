@@ -7,6 +7,7 @@
     <title>@ViewBag.Title - 我的 ASP.NET 應用程式</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
     @* [[ 分頁 ]] *@
     @RenderSection("styles", required: false)
 </head>
@@ -42,6 +43,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/jquery.datetimepicker.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
