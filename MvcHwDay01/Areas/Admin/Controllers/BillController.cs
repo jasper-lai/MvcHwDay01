@@ -27,7 +27,7 @@ namespace MvcHwDay01.Areas.Admin.Controllers
         }
 
         // GET: Admin/Bill
-        public ActionResult Index(int? page = 1)
+        public ActionResult Index(string year, string month, int? page = 1)
         {
             ////取得最近的 30 資料, 依日期降冪
             ////呼叫 Service 層提供的資料查詢功能
@@ -44,8 +44,13 @@ namespace MvcHwDay01.Areas.Admin.Controllers
             //var bills = _billingSvc.GetSkipMTakeN((pageNumber - 1) * pageSize, pageSize);
             //var onePage = new StaticPagedList<BillingItemViewModel>(bills, pageNumber, pageSize, totalCnt);
 
-            string year = Request.QueryString["year"];
-            string month = Request.QueryString["month"];
+            //交由 ASP.NET MVC 自行 binding 到參數上 
+            //string year = Request.QueryString["year"];
+            //string month = Request.QueryString["month"];
+            //if (!RouteData.Values.TryGetValue("year", out year))
+            //{
+            //}
+
             int intYear = 0;
             int intMonth = 0;
             IEnumerable<BillingItemViewModel> bills = null;
