@@ -1,32 +1,35 @@
-﻿@model IEnumerable<MvcHwDay01.Models.BillingItemViewModel>
+﻿@model IPagedList<MvcHwDay01.Models.BillingItemViewModel>
 @using MvcHwDay01.Models.Extensions
+
+@* [[ 分頁 ]] *@
+@section styles
+{
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+}
 
 @{
     ViewBag.Title = "ListCurrent";
     Layout = null;
 }
 
-@*<h2>ListCurrent</h2>*@
-
-@*<p>
-    @Html.ActionLink("Create New", "Create")
-</p>*@
 <table class="table">
     <tr>
         <th class="col-md-1">
             編號:#
         </th>
         <th class="col-md-1">
-            @Html.DisplayNameFor(model => model.BillTypeName)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().BillTypeName)
         </th>
-        <th class="col-md-2">
-            @Html.DisplayNameFor(model => model.BillDate)
+        <th class="col-md-1">
+            @Html.DisplayNameFor(model => model.FirstOrDefault().BillDate)
         </th>
-        <th class="col-md-2">
-            @Html.DisplayNameFor(model => model.Amount)
+        <th class="col-md-1">
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Amount)
         </th>
         <th class="col-md-6">
-            @Html.DisplayNameFor(model => model.Memo)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Memo)
+        </th>
+        <th class="col-md-2">
         </th>
     </tr>
 
@@ -55,9 +58,31 @@
             <td>
                 @*//處理備註欄位內容過長, 導致表格破掉, 改用只取前 60 個字元, 再加 "..." 的方式*@
                 @*@Html.DisplayFor(modelItem => item.Memo)*@
-                @item.Memo.SubstringEx(0,60)
+                @item.Memo.SubstringEx(0, 60)
+            </td>
+            <td>
+                @Html.ActionLink("編輯", "Edit", new { id = item.Id })
+                @Html.ActionLink("刪除", "Delete", new { id = item.Id })
             </td>
         </tr>
     }
 
 </table>
+
+@*複雜的分頁列樣式*@
+@Html.PagedListPager(Model, page => Url.Action("Create", new { page = page }),
+    new PagedListRenderOptions
+    {
+        LinkToFirstPageFormat = "<< 第一頁",
+        LinkToPreviousPageFormat = "< 前一頁",
+        LinkToNextPageFormat = "下一頁 >",
+        LinkToLastPageFormat = "最末頁 >>",
+        DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+        DisplayLinkToLastPage = PagedListDisplayMode.Always,
+        PageCountAndCurrentLocationFormat = "第 {0} 頁 / 共 {1} 頁",
+        DisplayPageCountAndCurrentLocation = true,
+        //ItemSliceAndTotalFormat = "顯示項目: {0} ~ {1} / 共 {2} 項",
+        //DisplayItemSliceAndTotal = true,
+    })

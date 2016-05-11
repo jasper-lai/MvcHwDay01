@@ -8,6 +8,7 @@ using MvcHwDay01.Models.Services;
 using System.Net;
 using System.Threading;
 using MvcHwDay01.Filters;
+using PagedList;
 
 namespace MvcHwDay01.Controllers
 {
@@ -15,6 +16,7 @@ namespace MvcHwDay01.Controllers
     {
 
         private readonly BillingService _billingSvc = null;
+        private int pageSize = 10;      //每頁10筆資料
 
         public BillController()
         {
@@ -32,7 +34,7 @@ namespace MvcHwDay01.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult Create(int? page)
         {
             var obj = new BillingItemViewModel()
             {
@@ -73,7 +75,7 @@ namespace MvcHwDay01.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AuthorizePlus] 
-        public ActionResult CreateWithAjax(BillingItemViewModel item)
+        public ActionResult CreateWithAjax(BillingItemViewModel item, int? page)
         {
             //定位在當初輸入資料的那個值
             //不論 ModelState 是否為 Valid, 都要執行, 不然萬一 Model 驗證失敗, 就沒有 SelectList 可以用, 會造成例外 ...
@@ -136,8 +138,12 @@ namespace MvcHwDay01.Controllers
             _billingSvc.Add(item);
             _billingSvc.Save();
 
-            var bills = _billingSvc.GetTopN(5);
-            return PartialView("ListCurrent", bills);
+            int pageNumber = (!page.HasValue ? 1 : (page.Value < 1 ? 1 : page.Value));
+            var bills = _billingSvc.GetAll();
+            var onePage = bills.ToPagedList(pageNumber, pageSize);
+
+            return PartialView("ListCurrent", onePage);
+            //return PartialView("ListCurrent", bills);
         }
 
         /// <summary>
@@ -145,13 +151,17 @@ namespace MvcHwDay01.Controllers
         /// </summary>
         /// <returns></returns>
         [ChildActionOnly]
-        public ActionResult ListCurrent()
+        public ActionResult ListCurrent(int? page)
         {
             //取得最近的 5 筆資料, 依日期降冪
             //呼叫 Service 層提供的資料查詢功能
-            var bills = _billingSvc.GetTopN(5);
+            //var bills = _billingSvc.GetTopN(5);
 
-            return View(bills);
+            int pageNumber = (!page.HasValue ? 1 : (page.Value < 1 ? 1 : page.Value));
+            var bills = _billingSvc.GetAll();
+            var onePage = bills.ToPagedList(pageNumber, pageSize);
+
+            return PartialView(onePage);
         }
 
     }
