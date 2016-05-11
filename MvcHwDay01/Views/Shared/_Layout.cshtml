@@ -44,6 +44,18 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script src="~/Scripts/jquery.datetimepicker.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("[data-datetimepicker]").datetimepicker({
+                closeOnDateSelect: true,
+                format: 'Y-m-d',
+                timepicker: false,
+                //lang: 'zh-TW',
+                //formatDate: 'Y-m-d H:i',
+            });
+        });
+    </script>
     @RenderSection("scripts", required: false)
+    @*@Scripts.Render("~/bundles/mysite")*@
 </body>
 </html>

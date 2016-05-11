@@ -1,0 +1,22 @@
+﻿@model DateTime?
+@{
+
+    //var value = Model?.ToString("yyyy-MM-dd HH:mm") ?? "";
+
+    var value = Model.HasValue
+    ? Model.Value.ToString("yyyy-MM-dd")
+    : ""; //可以在這裡給預設值, 例如: DateTime.Now or DateTiem.Today
+}
+
+@*@Html.TextBox(ViewData.TemplateInfo.HtmlFieldPrefix, value, new ...*@
+
+@Html.TextBox("", value, new
+{
+    @class = "form-control",
+    data_datetimepicker = "y",  //不吃 data-datetimepicker
+    ////經實測, datetimepicker 似乎不吃以下這個設定
+    //data_date_format = "Y-m-d H:i",  //這是給 javascript 看的
+})
+
+@*千萬不要把 javascript 放在這裡, 不然頁面有幾個 datetime, 就會有幾段重複的 javascript *@
+@*最好放在 site.js or _Layout.cshmtl*@
