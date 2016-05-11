@@ -44,9 +44,33 @@ namespace MvcHwDay01.Areas.Admin.Controllers
             //var bills = _billingSvc.GetSkipMTakeN((pageNumber - 1) * pageSize, pageSize);
             //var onePage = new StaticPagedList<BillingItemViewModel>(bills, pageNumber, pageSize, totalCnt);
 
+            string year = Request.QueryString["year"];
+            string month = Request.QueryString["month"];
+            int intYear = 0;
+            int intMonth = 0;
+            IEnumerable<BillingItemViewModel> bills = null;
+
+            //如果 year 與 month 都有值, 那就傳 year / month 的參數作查詢
+            //否則, 就查全部
+            if (year != null && month != null)
+            {
+                //如果2者都成功, 那就呼叫服務層作查詢
+                if (int.TryParse(year, out intYear) && int.TryParse(month, out intMonth))
+                {
+                    bills = _billingSvc.GetByQueryYM(intYear, intMonth);
+                }
+                else
+                {
+                    bills = new List<BillingItemViewModel>();   //回傳一個空物件
+                }
+            }
+            else
+            {
+                bills = _billingSvc.GetAll();
+            }
+
             //最後, 還是決定交給 ToPagedList() 作處理
             int pageNumber = (!page.HasValue ? 1 : (page.Value < 1 ? 1 : page.Value));
-            var bills = _billingSvc.GetAll();
             var onePage = bills.ToPagedList(pageNumber, pageSize);
 
             return View(onePage);

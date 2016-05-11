@@ -82,7 +82,7 @@
 @*@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))*@
 
 @*複雜的分頁列樣式*@
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+@Html.PagedListPager(Model, page => Url.Action("Index", new { year=Request.QueryString["year"], month=Request.QueryString["month"], page = page }),
     new PagedListRenderOptions
     {
         LinkToFirstPageFormat = "<< 第一頁",

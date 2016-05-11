@@ -305,7 +305,7 @@ namespace MvcHwDay01.Models.Services
 
             //再逐步下 WHERE
             //參考: http://stackoverflow.com/questions/6353350/multiple-where-conditions-in-ef
-            if (query.BillType != null && query.BillType > -1 )
+            if (query.BillType != null && query.BillType > -1)
             {
                 bills = bills.Where(x => x.BillType == query.BillType);
             }
@@ -345,5 +345,27 @@ namespace MvcHwDay01.Models.Services
 
         #endregion
 
+
+        #region 練習 Query 的功能 (by 年月)
+
+        public IEnumerable<BillingItemViewModel> GetByQueryYM(int year, int month)
+        {
+            //建立取全部資料的 SQL
+            //註: 以下這些敍述, 都還沒有到 DB 實際存取; 只有在 View 的 foreach, 才會真正取資料
+            var bills = this.GetAll();
+            DateTime start = new DateTime(year, month, 1);
+            DateTime end = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+
+            //串接 WHERE 條件
+            bills = bills.Where(x => x.BillDate >= start);
+            bills = bills.Where(x => x.BillDate <= end);
+
+            bills = bills.OrderByDescending(x => x.BillDate);
+            return bills;
+
+        }
+
+
+        #endregion
     }
 }
