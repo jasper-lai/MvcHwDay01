@@ -27,6 +27,8 @@
             @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                @*<span class="input-group-addon">@Html.DisplayFor(model => model.StartDate)</span>
+                <span class="input-group-addon">@Html.DisplayTextFor(model => model.StartDate)</span>*@
                 @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -35,6 +37,8 @@
             @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                @*<span class="input-group-addon">@Html.DisplayFor(model => model.EndDate)</span>
+                <span class="input-group-addon">@Html.DisplayTextFor(model => model.EndDate)</span>*@
                 @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
             </div>
         </div>

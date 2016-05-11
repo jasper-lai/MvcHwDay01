@@ -43,7 +43,8 @@ namespace MvcHwDay01.Models
         [Display(Name = "日期")]
         [DataType(DataType.Date)]
         //[Range(typeof(DateTime),"2016/04/01", "2016/04/30", ErrorMessage = "{0} 欄位不可大於今日")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [UIHint("DateOnly")]
         [DateMustLessOrEqualThanToday]
         public DateTime BillDate { get; set; }
 

@@ -28,7 +28,8 @@ namespace MvcHwDay01.Areas.Admin.ViewModels
         /// </remarks>
         [Display(Name = "查詢日期區間(起)")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [UIHint("DateOnly")]
         public DateTime? StartDate { get; set; }
 
         /// <summary>
@@ -39,7 +40,8 @@ namespace MvcHwDay01.Areas.Admin.ViewModels
         /// </remarks>
         [Display(Name = "查詢日期區間(迄)")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [UIHint("DateOnly")]
         public DateTime? EndDate { get; set; }
 
         /// <summary>

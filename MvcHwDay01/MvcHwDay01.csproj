@@ -352,6 +352,7 @@
     <Content Include="Views\Bill\Create.cshtml" />
     <Content Include="Views\Bill\ListCurrent.cshtml" />
     <Content Include="Views\Home\About2.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\DateOnly.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
