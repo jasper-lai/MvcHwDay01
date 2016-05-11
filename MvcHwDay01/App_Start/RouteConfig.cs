@@ -13,6 +13,22 @@ namespace MvcHwDay01
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //加上這行可以強制 url 小寫
+            //所有 Url Helper, Html Helper 產生的 url, 都是小寫
+            routes.LowercaseUrls = true;
+
+            routes.MapRoute(
+                name: "skilltreeCreate",
+                url: "skilltree",
+                defaults: new
+                {
+                    controller = "Bill",
+                    action = "Create",
+                    id = UrlParameter.Optional
+                },
+                namespaces: new[] { "MvcHwDay01.Controllers" }
+            );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

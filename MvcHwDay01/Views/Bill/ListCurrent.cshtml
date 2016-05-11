@@ -29,8 +29,8 @@
         <th class="col-md-6">
             @Html.DisplayNameFor(model => model.FirstOrDefault().Memo)
         </th>
-        <th class="col-md-2">
-        </th>
+        @*<th class="col-md-2">
+        </th>*@
     </tr>
 
     @{
@@ -60,10 +60,10 @@
                 @*@Html.DisplayFor(modelItem => item.Memo)*@
                 @item.Memo.SubstringEx(0, 60)
             </td>
-            <td>
+            @*<td>
                 @Html.ActionLink("編輯", "Edit", new { id = item.Id })
                 @Html.ActionLink("刪除", "Delete", new { id = item.Id })
-            </td>
+            </td>*@
         </tr>
     }
 
