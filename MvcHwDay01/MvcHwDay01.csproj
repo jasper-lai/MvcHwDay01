@@ -239,6 +239,7 @@
     <Compile Include="Models\BillingViewModels.cs" />
     <Compile Include="Models\Extensions\StringExtension.cs" />
     <Compile Include="Models\Globals\GlobalCodeMappings.cs" />
+    <Compile Include="Models\Globals\GlobalEnums.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Services\BillingService.cs" />
@@ -258,6 +259,10 @@
       <DependentUpon>SkillTreeHomeworkModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\EFUnitOfWork.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\IUnitOfWork.cs" />
+    <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

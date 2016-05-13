@@ -9,6 +9,7 @@ using System.Net;
 using System.Threading;
 using MvcHwDay01.Filters;
 using PagedList;
+using MvcHwDay01.Repositories;
 
 namespace MvcHwDay01.Controllers
 {
@@ -20,7 +21,9 @@ namespace MvcHwDay01.Controllers
 
         public BillController()
         {
-            _billingSvc = new BillingService();
+            //共用同一條連線 (in Controller constructor)
+            var unitOfWork = new EFUnitOfWork();
+            _billingSvc = new BillingService(unitOfWork);
         }
 
         // GET: Bill

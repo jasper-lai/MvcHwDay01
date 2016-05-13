@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using MvcHwDay01.Areas.Admin.Filters;
 using MvcHwDay01.Areas.Admin.ViewModels;
+using MvcHwDay01.Repositories;
 
 namespace MvcHwDay01.Areas.Admin.Controllers
 {
@@ -23,7 +24,9 @@ namespace MvcHwDay01.Areas.Admin.Controllers
 
         public BillController()
         {
-            _billingSvc = new BillingService();
+            //共用同一條連線 (in Controller constructor)
+            var unitOfWork = new EFUnitOfWork();
+            _billingSvc = new BillingService(unitOfWork);
         }
 
         // GET: Admin/Bill
