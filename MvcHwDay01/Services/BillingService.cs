@@ -6,8 +6,9 @@ using System.Web;
 using MvcHwDay01.Areas.Admin.ViewModels;
 using MvcHwDay01.Repositories;
 using MvcHwDay01.Models.Globals;
+using MvcHwDay01.Models;
 
-namespace MvcHwDay01.Models.Services
+namespace MvcHwDay01.Services
 {
 
     public class BillingService

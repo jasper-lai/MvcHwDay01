@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MvcHwDay01.Models;
-using MvcHwDay01.Models.Services;
+using MvcHwDay01.Services;
 using System.Net;
 using System.Threading;
 using MvcHwDay01.Filters;

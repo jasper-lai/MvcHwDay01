@@ -1,5 +1,5 @@
 ﻿using MvcHwDay01.Models;
-using MvcHwDay01.Models.Services;
+using MvcHwDay01.Services;
 using PagedList;
 using System;
 using System.Collections.Generic;
