@@ -16,7 +16,7 @@ namespace MvcHwDay01.Repositories
             Context = new SkillTreeHomeworkEntities();
         }
 
-        public void Save()
+        public void Commit()
         {
             Context.SaveChanges();
         }

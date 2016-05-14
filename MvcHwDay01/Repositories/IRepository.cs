@@ -80,10 +80,11 @@ namespace MvcHwDay01.Repositories
         /// <param name="entity"></param>
         void Remove(T entity);
 
-        /// <summary>
-        /// save change
-        /// </summary>
-        void Commit();
+        //將 Commit 的功能, 移到 UnitOfWork, 比較符合資料庫的操作
+        ///// <summary>
+        ///// save change
+        ///// </summary>
+        //void Commit();
 
     }
 }

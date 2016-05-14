@@ -21,9 +21,7 @@ namespace MvcHwDay01.Controllers
 
         public BillController()
         {
-            //共用同一條連線 (in Controller constructor)
-            var unitOfWork = new EFUnitOfWork();
-            _billingSvc = new BillingService(unitOfWork);
+            _billingSvc = new BillingService();
         }
 
         // GET: Bill
@@ -39,12 +37,21 @@ namespace MvcHwDay01.Controllers
         [HttpGet]
         public ActionResult Create(int? page)
         {
+            #region 建立初始資料
+
             var obj = new BillingItemViewModel()
             {
                 BillDate = DateTime.Today
             };
             ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", -1);
+
+            #endregion
+
+            #region 回傳結果
+
             return View(obj);
+
+            #endregion
         }
 
         /// <summary>
@@ -60,19 +67,30 @@ namespace MvcHwDay01.Controllers
             //定位在當初輸入資料的那個值
             //不論 ModelState 是否為 Valid, 都要執行, 不然萬一 Model 驗證失敗, 就沒有 SelectList 可以用, 會造成例外 ...
             ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", item.BillType);
-            Thread.Sleep(3 * 1000); //暫停一下, 看效果
+            //Thread.Sleep(3 * 1000); //暫停一下, 看效果
+
+            #region Model 檢查
 
             if (!ModelState.IsValid)
             {
                 return View(item);
             }
 
-            //呼叫 Service 層提供的功能
+            #endregion
+
+            #region 呼叫服務層
+
             item.Id = Guid.NewGuid();
             _billingSvc.Add(item);
-            _billingSvc.Save();
+
+            #endregion
+
+            #region 回傳結果
 
             return View();
+
+            #endregion
+
         }
 
         [HttpPost]
@@ -83,7 +101,9 @@ namespace MvcHwDay01.Controllers
             //定位在當初輸入資料的那個值
             //不論 ModelState 是否為 Valid, 都要執行, 不然萬一 Model 驗證失敗, 就沒有 SelectList 可以用, 會造成例外 ...
             ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", item.BillType);
-            Thread.Sleep(3 * 1000); //暫停一下, 看效果
+            //Thread.Sleep(3 * 1000); //暫停一下, 看效果
+
+            #region Model 檢查
 
             if (!ModelState.IsValid)
             {
@@ -136,17 +156,31 @@ namespace MvcHwDay01.Controllers
 
             }
 
+            #endregion
+
+            #region 呼叫服務層
+
             //呼叫 Service 層提供的功能
             item.Id = Guid.NewGuid();
             _billingSvc.Add(item);
-            _billingSvc.Save();
+
+            #endregion
+
+            #region 分頁處理
 
             int pageNumber = (!page.HasValue ? 1 : (page.Value < 1 ? 1 : page.Value));
             var bills = _billingSvc.GetAll();
             var onePage = bills.ToPagedList(pageNumber, pageSize);
 
+            #endregion
+
+            #region 回傳結果
+
             return PartialView("ListCurrent", onePage);
             //return PartialView("ListCurrent", bills);
+
+            #endregion
+
         }
 
         /// <summary>
@@ -160,11 +194,25 @@ namespace MvcHwDay01.Controllers
             //呼叫 Service 層提供的資料查詢功能
             //var bills = _billingSvc.GetTopN(5);
 
-            int pageNumber = (!page.HasValue ? 1 : (page.Value < 1 ? 1 : page.Value));
+            #region 呼叫服務層
+
             var bills = _billingSvc.GetAll();
+
+            #endregion
+
+            #region 分頁處理
+
+            int pageNumber = (!page.HasValue ? 1 : (page.Value < 1 ? 1 : page.Value));
             var onePage = bills.ToPagedList(pageNumber, pageSize);
 
+            #endregion
+
+            #region 回傳結果
+
             return PartialView(onePage);
+
+            #endregion
+
         }
 
     }

@@ -12,9 +12,10 @@ namespace MvcHwDay01.Repositories
         /// context
         /// </summary>
         DbContext Context { get; set; }
+
         /// <summary>
         /// save change
         /// </summary>
-        void Save();
+        void Commit();
     }
 }

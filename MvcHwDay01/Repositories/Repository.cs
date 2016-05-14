@@ -110,9 +110,10 @@ namespace MvcHwDay01.Repositories
             ObjectSet.Remove(entity);
         }
 
-        public void Commit()
-        {
-            UnitOfWork.Save();
-        }
+        //將 Commit 的功能, 移到 UnitOfWork, 比較符合資料庫的操作
+        //public void Commit()
+        //{
+        //    UnitOfWork.Save();
+        //}
     }
 }
