@@ -362,6 +362,7 @@
     <Content Include="Views\Home\About2.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\DateOnly.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateOnly.cshtml" />
+    <Content Include="Views\Bill\QueryForAnotherLib.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -378,6 +379,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MvcHwLib01\MvcHwLib01.csproj">
+      <Project>{69436b4d-6cc6-46ad-bb62-726ae15c414e}</Project>
+      <Name>MvcHwLib01</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

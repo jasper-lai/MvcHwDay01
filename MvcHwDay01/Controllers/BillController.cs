@@ -10,6 +10,7 @@ using System.Threading;
 using MvcHwDay01.Filters;
 using PagedList;
 using MvcHwDay01.Repositories;
+using MvcHwLib01.ViewModels;
 
 namespace MvcHwDay01.Controllers
 {
@@ -213,6 +214,43 @@ namespace MvcHwDay01.Controllers
 
             #endregion
 
+        }
+
+
+        [HttpGet]
+        public ActionResult QueryForAnotherLib()
+        {
+            #region 準備初始資料
+
+            var obj = new QueryViewModel()
+            {
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Today,
+            };
+            ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", -1);
+
+            #endregion
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        public ActionResult QueryForAnotherLib(QueryViewModel query)
+        {
+            //定位在當初輸入資料的那個值
+            ViewBag.BillTypes = new SelectList(GlobalCodeMappings.BillTypes, "Key", "Value", query.BillType);
+
+            #region Model 檢查
+
+            //輸入資料驗證
+            if (!ModelState.IsValid)
+            {
+                return View(query);
+            }
+
+            #endregion
+
+            return View(query);
         }
 
     }
